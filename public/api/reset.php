@@ -25,7 +25,7 @@
     $password = $data['password'];
 
     // Call the function from validate.php
-    $result = validateUser($email, $password);
+    $result = resetUser($email, $password);
     echo JSON_encode($result);
 
 ?>

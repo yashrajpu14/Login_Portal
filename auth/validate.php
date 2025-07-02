@@ -1,41 +1,89 @@
 <?php
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../config/jwt.php';
+require_once __DIR__ . '/../helper/getEnvironmentValue.php';
+
+use Config\JWTToken;
 use Config\Database;
+use Helper\EnvironmentValue;
 
-function validateUser($email, $inputPassword)
-{
+    function validateUser($email, $inputPassword)
+    {
+        $emailOrUsername = trim($email);
 
-    $emailOrUsername = trim($email);
+        // If no '@' is present, treat as username and append domain
+        if (strpos($emailOrUsername, '@') === false) {
+            $email = $emailOrUsername . '@iitp.ac.in';
+        } 
+        else 
+        {
+            $email = $emailOrUsername;
+        }
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-    // If no '@' is present, treat as username and append domain
-    if (strpos($emailOrUsername, '@') === false) {
-        $email = $emailOrUsername . '@iitp.ac.in';
-    } else {
-        $email = $emailOrUsername;
+        $db = new Database();
+        $result = $db->select($email);
+        
+        if ($result) {
+            $storedHash = $result['password_hash'];
+            $timestamp = $result['created_time'];
+
+            // Fixed salt string
+            $env = new EnvironmentValue();
+            $salt = $env->getSecretKey('salt');
+
+            //Object of JWT Token 
+            $jwt = new JWTToken();
+
+            // Reconstruct the hash using the input password and stored timestamp
+            $computedHash = sha1($timestamp . $salt . $inputPassword);
+            // Compare the hash
+            if ($storedHash !== null && $storedHash !== null && hash_equals($storedHash, $computedHash))
+                return $jwt->generateJWTToken($email);
+            else
+                return ["success" => false,
+                "message" => "Incorrect Password",
+            ];
+        }
+
+        return ["success" => false,
+            "message" => "Incorrect User",
+        ];
     }
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
-    $db = new Database();
-    $conn = $db->connect();
-    $query = "SELECT created_time, password_hash FROM users WHERE email = ? AND is_active = 1 LIMIT 1";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$email]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($result) {
-        $storedHash = $result['password_hash'];
-        $timestamp = $result['created_time'];
+    function resetUser($email, $inputPassword)
+    {
 
-        // Your fixed salt string
-        $salt = '25698011483056497657570148107615';
+        $emailOrUsername = trim($email);
 
-        // Reconstruct the hash using the input password and stored timestamp
+        // If no '@' is present, treat as username and append domain
+        if (strpos($emailOrUsername, '@') === false) {
+            $email = $emailOrUsername . '@iitp.ac.in';
+        } else {
+            $email = $emailOrUsername;
+        }
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        $timestamp = time();
+        // Fixed salt string
+        $env = new EnvironmentValue();
+        $salt = $env->getSecretKey('salt');
+
+        // Construct the hash using the input password and stored timestamp
         $computedHash = sha1($timestamp . $salt . $inputPassword);
-        // Compare the hash
-        if ($storedHash !== null && $storedHash !== null)
-            return hash_equals($storedHash, $computedHash);
+
+        $db = new Database();
+        $result = $db->updatePassword($email, $computedHash, $timestamp);
+        
+        if ($result>0) 
+        {
+            return ["success" => true,
+                "message" => "Password updated successfully",
+            ];
+        }
+
+        return ["success" => $result,
+            "message" => "User is not present",
+        ];
     }
 
-    return false;
-}
 ?>
