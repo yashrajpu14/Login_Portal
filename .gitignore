@@ -1,5 +1,4 @@
 # CakePHP 3
-.env
 /vendor/*
 /config/app.php
 
@@ -23,3 +22,46 @@
 /app/Config/core.php
 /app/Config/database.php
 /vendors/*
+
+
+### .gitignore
+
+```gitignore
+# Ignore composer vendor directory
+/vendor/
+
+# Ignore environment configuration file
+/.env
+
+# Ignore IDE and editor files
+/.idea/
+/.vscode/
+/*.sublime-workspace
+/*.sublime-project
+
+# Ignore log files
+*.log
+
+# Ignore local server setup files
+/xampp/
+
+# Ignore backup files
+*.bak
+*.swp
+*.swx
+
+# Ignore public directory build files (e.g., if using a build process for public assets)
+public/build/
+
+# Ignore node_modules (if you use Node.js for frontend build)
+node_modules/
+
+# Ignore compiled PHP files
+*.php~
+
+# Ignore database dumps
+*.sql
+
+# Ignore any temporary files
+*.tmp
+
