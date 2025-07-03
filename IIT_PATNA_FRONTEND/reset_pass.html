@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>IIT_PATNA_RESET_PASSWORD</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <link rel="stylesheet" href="css/bootstrap-login-form.min.css" />
+
+    <style>
+        /* Global reset for margin and padding */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .bg-image-vertical {
+            position: relative;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: auto 100%;
+        }
+
+        @media (min-width: 1025px) {
+            .h-custom-2 {
+                height: 100%;
+            }
+        }
+
+        /* Styles for the logo container */
+        .logo-container {
+            /* Keep existing styles or add new ones */
+        }
+
+        /* Styles for the custom logo image */
+        .custom-logo {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            padding: 20px;
+            /* Adjust or remove based on your design */
+        }
+    </style>
+</head>
+
+<body>
+    <section class="vh-100">
+        <div class="container-fluid p-4">
+            <div class="row">
+                <div class="col-sm-6 text-black">
+
+                    <div class="px-5 ms-xl-4 logo-container">
+                        <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="My Awesome Company Logo"
+                            class="custom-logo">
+                    </div>
+
+                    <div
+                        class="d-flex align-items-center justify-content-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+
+                        <form id="resetPasswordForm" style="width: 23rem;">
+
+                            <h2 class="fw-normal mb-3 pb-3 text-center" style="letter-spacing: 1px;"><b>Reset
+                                    Password</b></h2>
+
+                            <div class="form-outline mb-4">
+                                <input type="email" id="emailInput" class="form-control form-control-lg" />
+                                <label class="form-label" for="emailInput">Email address</label>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" id="newPasswordInput" class="form-control form-control-lg" />
+                                <label class="form-label" for="newPasswordInput">New Password</label>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" id="confirmPasswordInput" class="form-control form-control-lg" />
+                                <label class="form-label" for="confirmPasswordInput">Confirm Password</label>
+                            </div>
+
+                            <div class="pt-1 mb-4">
+                                <button class="btn btn-info btn-lg btn-block" type="submit">Reset Password</button>
+                            </div>
+
+                            <p class="text-center mb-0"><a class="text-muted" href="login-form-5.html">Back to Login</a></p>
+
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="col-sm-6 px-0 d-none d-sm-block">
+                    <img src="1000021617.webp" alt="Login image" class="w-100 vh-100"
+                        style="object-fit: cover; object-position: left;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+
+    <script type="text/javascript">
+        // Get references to the form and input fields using their new IDs
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const emailInput = document.getElementById('emailInput');
+        const newPasswordInput = document.getElementById('newPasswordInput');
+        const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+
+        // Add an event listener for the form's submit event
+        resetPasswordForm.addEventListener('submit', async function (event) {
+            // Prevent the default form submission behavior (page refresh)
+            event.preventDefault();
+
+            // 1. Get the values from the input fields
+            const email = emailInput.value;
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Basic validation
+            if (!email || !newPassword || !confirmPassword) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('New Password and Confirm Password do not match.');
+                return;
+            }
+
+            // 2. Create a JavaScript object with the data
+            const resetData = {
+                email: email,
+                newPassword: newPassword // Note: API might expect 'password' or 'new_password'
+                // You might need a token from a password reset email if this is a real-world flow
+                // token: "some-reset-token-here"
+            };
+
+            // 3. Convert the JavaScript object to a JSON string
+            const jsonData = JSON.stringify(resetData);
+
+            // Define your API endpoint URL for password reset
+            // !!! IMPORTANT: REPLACE THIS WITH YOUR ACTUAL PASSWORD RESET API URL !!!
+            const apiUrl = 'https://api.example.com/reset-password'; // Example placeholder URL
+
+            console.log('Sending data:', jsonData); // For debugging: see what you're sending
+
+            try {
+                // 4. Send the JSON data to the API using the fetch API
+                const response = await fetch(apiUrl, {
+                    method: 'POST', // Or 'PUT', 'PATCH' depending on your API
+                    headers: {
+                        'Content-Type': 'application/json', // Tell the API we're sending JSON
+                    },
+                    body: jsonData // The JSON string goes in the body of the request
+                });
+
+                // 5. Handle the API response
+                if (response.ok) { // Check if the response status is 200-299 (success)
+                    const result = await response.json(); // Parse the JSON response from the API
+                    console.log('API Response Success:', result);
+                    alert('Password reset successful! You can now log in with your new password.');
+                    // Typically, redirect back to the login page after a successful reset
+                    // window.location.href = 'index.html';
+                } else {
+                    // Handle API errors (e.g., 400 Bad Request, 404 User Not Found)
+                    const errorData = await response.json(); // Try to parse error message if available
+                    console.error('API Response Error:', response.status, errorData);
+                    alert('Password reset failed: ' + (errorData.message || 'An error occurred. Please try again.'));
+                }
+            } catch (error) {
+                // Handle network errors (e.g., API is down, no internet)
+                console.error('Network Error during password reset:', error);
+                alert('A network error occurred. Please try again later.');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>IIT_PATNA_LOGIN</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+  <link rel="stylesheet" href="css/bootstrap-login-form.min.css" />
+
+  <style>
+    /* Global reset for margin and padding */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      
+      /* Prevent horizontal scrolling */
+    }
+  
+    .bg-image-vertical {
+      position: relative;
+      overflow: hidden;
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: auto 100%;
+    }
+  
+    @media (min-width: 1025px) {
+      .h-custom-2 {
+        height: 100%;
+      }
+    }
+  
+    /* Styles for the logo container */
+    .logo-container {
+      /* If you need to ensure this container itself doesn't cause overflow,
+             you might add overflow: hidden; here if its content could go beyond its bounds.
+             However, max-width: 100% on the image usually handles this. */
+      /* Example if you want a fixed height for the container to contain the logo: */
+      /* height: 80px; */
+      /* overflow: hidden; */
+    }
+  
+    /* Styles for the custom logo image */
+    .custom-logo {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      padding: 20px;
+      /* If you set a fixed height on .logo-container, consider object-fit here: */
+      /* object-fit: contain; */
+      /* object-position: left; */
+    }
+  </style>
+</head>
+
+<body>
+  <section class="vh-100">
+    <div class="container-fluid p-4">
+      <div class="row">
+        <div class="col-sm-6 text-black">
+
+          <div class="px-5 ms-xl-4 logo-container">
+            <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="My Awesome Company Logo" class="custom-logo">
+          </div>
+
+          <div
+            class="d-flex align-items-center justify-content-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+
+            <form id="loginForm" style="width: 23rem;">
+
+              <h2 class="fw-normal mb-3 pb-3 text-center" style="letter-spacing: 1px;"><b>Log in</b></h2>
+
+              <div class="form-outline mb-4">
+                <input type="email" id="emailInput" class="form-control form-control-lg" />
+                <label class="form-label" for="emailInput">Email address</label>
+              </div>
+
+              <div class="form-outline mb-4">
+                <input type="password" id="passwordInput" class="form-control form-control-lg" />
+                <label class="form-label" for="passwordInput">Password</label>
+              </div>
+
+              <div class="pt-1 mb-4">
+                <button class="btn btn-info btn-lg btn-block" type="submit">Login</button>
+              </div>
+
+              <p class="small mb-5 pb-lg-2"><a class="text-muted" href="reset_pass.html">Forgot password?</a></p>
+
+            </form>
+
+          </div>
+
+        </div>
+        <div class="col-sm-6 px-0 d-none d-sm-block">
+          <img src="1000021617.webp" alt="Login image" class="w-100 vh-100"
+            style="object-fit: cover; object-position: left;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+
+  <script type="text/javascript">
+    // Get references to the form and input fields using their new IDs
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+
+    // Add an event listener for the form's submit event
+    // The 'async' keyword allows us to use 'await' inside the function
+    loginForm.addEventListener('submit', async function (event) {
+      // Prevent the default form submission behavior (page refresh)
+      event.preventDefault();
+
+      // 1. Get the values from the input fields
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      // Basic validation (optional, but good practice)
+      if (!email || !password) {
+        alert('Please enter both email and password.');
+        return; // Stop the function if validation fails
+      }
+
+      // 2. Create a JavaScript object with the data
+      const loginData = {
+        email: email,
+        password: password
+      };
+
+      // 3. Convert the JavaScript object to a JSON string
+      const jsonData = JSON.stringify(loginData);
+
+      // Define your API endpoint URL
+      // !!! IMPORTANT: REPLACE THIS WITH YOUR ACTUAL LOGIN API URL !!!
+      const apiUrl = 'https://api.example.com/login'; // Example placeholder URL
+
+      console.log('Sending data:', jsonData); // For debugging: view in browser console
+
+      try {
+        // 4. Send the JSON data to the API using the fetch API
+        const response = await fetch(apiUrl, {
+          method: 'POST', // Use POST for sending data like login credentials
+          headers: {
+            'Content-Type': 'application/json' // Crucial: tells the server the body is JSON
+          },
+          body: jsonData // The JSON string as the request body
+        });
+
+        // 5. Handle the API response
+        if (response.ok) { // Check if the response status is 200-299 (success range)
+          const result = await response.json(); // Parse the JSON response from the server
+          console.log('API Response Success:', result);
+          alert('Login successful! Welcome.');
+          // Here, you would typically:
+          // 1. Store any authentication token (e.g., in localStorage)
+          // 2. Redirect the user to a dashboard or main application page
+          // window.location.href = 'dashboard.html'; // Example redirect
+        } else {
+          // Handle API errors (e.g., 401 Unauthorized, 400 Bad Request, 500 Server Error)
+          // Try to parse error details if the server sends them in JSON format
+          const errorData = await response.json();
+          console.error('API Response Error:', response.status, errorData);
+          alert('Login failed: ' + (errorData.message || 'Invalid credentials or server error.'));
+        }
+      } catch (error) {
+        // Handle network errors (e.g., no internet connection, API server is down)
+        console.error('Network Error during login:', error);
+        alert('An error occurred during login. Please check your network or try again later.');
+      }
+    });
+  </script>
+</body>
+
+</html>
