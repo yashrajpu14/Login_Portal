@@ -18,11 +18,11 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
+      /* Prevents horizontal scrolling */
       overflow-y: hidden;
-      
-      /* Prevent horizontal scrolling */
+      /* Prevents vertical scrolling */
     }
-  
+
     .bg-image-vertical {
       position: relative;
       overflow: hidden;
@@ -30,44 +30,36 @@
       background-position: right center;
       background-size: auto 100%;
     }
-  
+
     @media (min-width: 1025px) {
       .h-custom-2 {
         height: 100%;
       }
     }
-  
+
     /* Styles for the logo container */
     .logo-container {
-      /* If you need to ensure this container itself doesn't cause overflow,
-             you might add overflow: hidden; here if its content could go beyond its bounds.
-             However, max-width: 100% on the image usually handles this. */
-      /* Example if you want a fixed height for the container to contain the logo: */
-      /* height: 80px; */
-      /* overflow: hidden; */
+      /* Keep as is if no specific needs */
     }
-  
+
     /* Styles for the custom logo image */
     .custom-logo {
       max-width: 100%;
       height: auto;
       display: block;
-      padding: 20px;
-      /* If you set a fixed height on .logo-container, consider object-fit here: */
-      /* object-fit: contain; */
-      /* object-position: left; */
+      /* REMOVED: padding: 20px; from here. This was directly padding the image. */
     }
   </style>
 </head>
 
 <body>
   <section class="vh-100">
-    <div class="container-fluid p-4">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-6 text-black">
+        <div class="col-sm-6 text-black p-4">
 
           <div class="px-5 ms-xl-4 logo-container">
-            <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="My Awesome Company Logo" class="custom-logo">
+            <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="IIT PATNA" class="custom-logo">
           </div>
 
           <div
@@ -91,7 +83,8 @@
                 <button class="btn btn-info btn-lg btn-block" type="submit">Login</button>
               </div>
 
-              <p class="small mb-5 pb-lg-2"><a class="text-muted" href="reset_pass.html">Forgot password?</a></p>
+              <p class="small mb-5 pb-lg-2"><a class="text-muted" href="reset_pass.html">Forgot
+                  password?</a></p>
 
             </form>
 
@@ -109,13 +102,12 @@
   <script type="text/javascript" src="js/mdb.min.js"></script>
 
   <script type="text/javascript">
-    // Get references to the form and input fields using their new IDs
+    // Get references to the form and input fields using their IDs
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
 
     // Add an event listener for the form's submit event
-    // The 'async' keyword allows us to use 'await' inside the function
     loginForm.addEventListener('submit', async function (event) {
       // Prevent the default form submission behavior (page refresh)
       event.preventDefault();
@@ -127,7 +119,7 @@
       // Basic validation (optional, but good practice)
       if (!email || !password) {
         alert('Please enter both email and password.');
-        return; // Stop the function if validation fails
+        return;
       }
 
       // 2. Create a JavaScript object with the data

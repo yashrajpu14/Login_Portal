@@ -19,7 +19,9 @@
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            /* Prevents horizontal scrolling */
             overflow-y: hidden;
+            /* Prevents vertical scrolling */
         }
 
         .bg-image-vertical {
@@ -38,7 +40,7 @@
 
         /* Styles for the logo container */
         .logo-container {
-            /* Keep existing styles or add new ones */
+            /* Keep as is if no specific needs */
         }
 
         /* Styles for the custom logo image */
@@ -46,21 +48,19 @@
             max-width: 100%;
             height: auto;
             display: block;
-            padding: 20px;
-            /* Adjust or remove based on your design */
+            /* REMOVED: padding: 20px; from here. This was directly padding the image. */
         }
     </style>
 </head>
 
 <body>
     <section class="vh-100">
-        <div class="container-fluid p-4">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-6 text-black">
+                <div class="col-sm-6 text-black p-4">
 
                     <div class="px-5 ms-xl-4 logo-container">
-                        <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="My Awesome Company Logo"
-                            class="custom-logo">
+                        <img src="भारतीय प्रौद्योगिकी संस्थान पटना (1).png" alt="IIT PATNA" class="custom-logo">
                     </div>
 
                     <div
@@ -90,7 +90,8 @@
                                 <button class="btn btn-info btn-lg btn-block" type="submit">Reset Password</button>
                             </div>
 
-                            <p class="text-center mb-0"><a class="text-muted" href="login-form-5.html">Back to Login</a></p>
+                            <p class="text-center mb-0"><a class="text-muted" href="login_page.html">Back to Login</a>
+                            </p>
 
                         </form>
 
@@ -138,9 +139,7 @@
             // 2. Create a JavaScript object with the data
             const resetData = {
                 email: email,
-                newPassword: newPassword // Note: API might expect 'password' or 'new_password'
-                // You might need a token from a password reset email if this is a real-world flow
-                // token: "some-reset-token-here"
+                newPassword: newPassword
             };
 
             // 3. Convert the JavaScript object to a JSON string
@@ -155,28 +154,26 @@
             try {
                 // 4. Send the JSON data to the API using the fetch API
                 const response = await fetch(apiUrl, {
-                    method: 'POST', // Or 'PUT', 'PATCH' depending on your API
+                    method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json', // Tell the API we're sending JSON
+                        'Content-Type': 'application/json',
                     },
-                    body: jsonData // The JSON string goes in the body of the request
+                    body: jsonData
                 });
 
                 // 5. Handle the API response
-                if (response.ok) { // Check if the response status is 200-299 (success)
-                    const result = await response.json(); // Parse the JSON response from the API
+                if (response.ok) {
+                    const result = await response.json();
                     console.log('API Response Success:', result);
                     alert('Password reset successful! You can now log in with your new password.');
                     // Typically, redirect back to the login page after a successful reset
                     // window.location.href = 'index.html';
                 } else {
-                    // Handle API errors (e.g., 400 Bad Request, 404 User Not Found)
-                    const errorData = await response.json(); // Try to parse error message if available
+                    const errorData = await response.json();
                     console.error('API Response Error:', response.status, errorData);
                     alert('Password reset failed: ' + (errorData.message || 'An error occurred. Please try again.'));
                 }
             } catch (error) {
-                // Handle network errors (e.g., API is down, no internet)
                 console.error('Network Error during password reset:', error);
                 alert('A network error occurred. Please try again later.');
             }
